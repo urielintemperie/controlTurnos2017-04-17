@@ -1,0 +1,44 @@
+{% extends 'aplicacionTurnos/baseABM.html' %}
+{% load widget_tweaks %}
+{% load bootstrap %}
+
+        {% block ABM %}
+            <h2>Turno</h2>
+            <form method="POST">
+              {% csrf_token %}
+              {% form_input form.estado %}
+              {% form_input form.medico %}
+              {% form_input form.paciente %}
+              {% form_input form.tratamiento %}
+              {% form_input form.dia %} <input type="submit" class="btn btn-success" value="Cambiar"/>
+              <br><br>
+                <select name='hour' multiple >
+                  {% for h in horarios %}
+                    <option value='{{h}}'>{{h}}</option>
+                  {% endfor %}
+                </select>
+                <br>
+              <div class="pull-right">
+                <input type="submit" class="btn btn-success" value="Guardar"/>
+              </div>
+            {% endblock%}
+
+    {% block tablas %}
+    <div id='tablaArriba'>
+      <table class="table table-hover">
+        <font size=5><p align=center>Horarios a elegir</p></font>
+        <tr>
+          <td class="warning">Horarios</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id='tablaAbajo'>
+
+      <table class="table table-hover">
+      <tr class="{{turno.estado}}">
+        </tr>
+      </table>
+      </div>
+      </form>
+    {% endblock %}
