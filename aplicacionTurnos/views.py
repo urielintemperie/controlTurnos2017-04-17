@@ -170,6 +170,7 @@ def editarPaciente(request, pk):
     if request.method == 'POST':
         form = pacienteForm(request.POST, instance = paciente)
         if form.is_valid():
+            paciente.estaActivo = True
             paciente = form.save(commit=True)
             return redirect('/nuevoPaciente')
     else:
@@ -203,10 +204,15 @@ def editarMedico(request, pk):
     medico = Medico.objects.get(pk=pk)
     if request.method == 'POST':
         form = medicoForm(request.POST, instance = medico)
+        '''
         if 'eliminar' in request.POST:
             medico.delete()
             return redirect('/nuevoMedico')
         elif form.is_valid():
+            form.save(commit=True)
+            return redirect('/nuevoMedico')
+        '''
+        if form.is_valid():
             form.save(commit=True)
             return redirect('/nuevoMedico')
     else:
@@ -223,7 +229,7 @@ def eliminarMedico(request , pk):
 "ABM Tratamiento"
 @login_required
 def nuevoTratamiento(request):
-    tratamientos = Tratamiento.objects.all().order_by('nombre')
+    tratamientos = Tratamiento.objects.filter(estaActivo = True).order_by('nombre')
     if request.method == 'POST':
         form = tratamientoForm(request.POST)
         if form.is_valid():
@@ -250,7 +256,9 @@ def editarTratamiento(request, pk):
 
 @login_required
 def eliminarTratamiento(request , pk):
-    Tratamiento.objects.filter(pk=pk).delete()
+    tratamiento = Tratamiento.objects.get(pk=pk)
+    tratamiento.estaActivo = False
+    tratamiento.save()
     return redirect ('aplicacionTurnos.views.nuevoTratamiento')
 
 "ABM obraSocial"

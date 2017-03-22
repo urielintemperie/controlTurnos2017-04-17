@@ -8,6 +8,7 @@ class Especialidad(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     nombre = models.CharField(max_length=50,blank=False)
+    estaActivo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -69,6 +70,7 @@ class ObraSocial(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     nombre = models.CharField(max_length=40,blank=False)
+    estaActivo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -102,6 +104,7 @@ class Tratamiento(models.Model):
     nombre = models.CharField(max_length=100,blank=False)
     duracion = models.TimeField(default=default_start_time())
     precio = models.IntegerField(blank=True, default=0)
+    estaActivo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre+' | '+str(self.duracion)
