@@ -204,6 +204,10 @@ def editarMedico(request, pk):
     medico = Medico.objects.get(pk=pk)
     if request.method == 'POST':
         form = medicoForm(request.POST, instance = medico)
+        if form.is_valid():
+            medico.estaActivo = True
+            medico = form.save(commit=True)
+            return redirect('/nuevoMedico')
         '''
         if 'eliminar' in request.POST:
             medico.delete()
@@ -212,9 +216,14 @@ def editarMedico(request, pk):
             form.save(commit=True)
             return redirect('/nuevoMedico')
         '''
+        '''
         if form.is_valid():
             form.save(commit=True)
-            return redirect('/nuevoMedico')
+            return redirect('/')
+            #return redirect('/nuevoMedico')
+        else:
+            return redirect('/')
+        '''
     else:
         form = medicoForm(instance = medico)
     return render(request, 'aplicacionTurnos/editarMedico.html',{'form':form})
@@ -264,7 +273,7 @@ def eliminarTratamiento(request , pk):
 "ABM obraSocial"
 @login_required
 def nuevoObraSocial(request):
-    obrasSociales = ObraSocial.objects.all().order_by('nombre')
+    obrasSociales = ObraSocial.objects.filter(estaActivo = True).order_by('nombre')
     if request.method == 'POST':
         form = obraSocialForm(request.POST)
         if form.is_valid():
@@ -297,14 +306,16 @@ def editarObraSocial(request, pk):
 
 @login_required
 def eliminarObraSocial(request , pk):
-    ObraSocial.objects.filter(pk=pk).delete()
+    obraSocial = ObraSocial.objects.get(pk=pk)
+    obraSocial.estaActivo = False
+    obraSocial.save()
     return redirect ('aplicacionTurnos.views.nuevoObraSocial')
 
 "ABM Especialidad"
 
 @login_required
 def nuevoEspecialidad(request):
-    especialidades = Especialidad.objects.all().order_by('nombre')
+    especialidades = Especialidad.objects.filter(estaActivo = True).order_by('nombre')
     if request.method == 'POST':
         form = especialidadForm(request.POST)
         if form.is_valid():
@@ -337,7 +348,9 @@ def editarEspecialidad(request, pk):
 
 @login_required
 def eliminarEspecialidad(request , pk):
-    Especialidad.objects.filter(pk=pk).delete()
+    especialidad = Especialidad.objects.get(pk=pk)
+    especialidad.estaActivo = False
+    especialidad.save()
     return redirect ('aplicacionTurnos.views.nuevoEspecialidad')
 
 "AMB Turno"
