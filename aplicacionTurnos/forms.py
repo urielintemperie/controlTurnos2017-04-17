@@ -5,6 +5,10 @@ from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 import datetime
+from django.contrib.admin.widgets import AdminDateWidget
+from functools import partial
+DateInput = partial(forms.DateInput, {'class': 'datepicker'})
+
 
 class pacienteForm(forms.ModelForm):
     class Meta:
@@ -22,6 +26,9 @@ class medicoForm(forms.ModelForm):
     class Meta:
         model = Medico
         fields = '__all__'
+        widgets = {
+            'estaActivo': forms.HiddenInput()
+        }
 
 
 class tratamientoForm(forms.ModelForm):
@@ -51,6 +58,42 @@ class turnoForm(forms.ModelForm):
             'horarios': forms.HiddenInput()
             }
 
+class turnoNuevoMagiaForm(forms.ModelForm):
+    horaInicio = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time start ui-timepicker-input', 'value' : '8:00am'}))
+    horaFin = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time end ui-timepicker-input', 'value' : '8:15am'}))
+    class Meta:
+        model = Turno
+        fields = '__all__'
+        widgets = {
+            'estaActivo': forms.HiddenInput(),
+            'dia' : DateInput(),
+            'horarios': forms.HiddenInput()
+            }
+    '''my_field = forms.DateField(widget = AdminDateWidget)
+    days = forms.ChoiceField(choices=[(x, x) for x in range(1, 32)])'''
+    '''
+    class Meta:
+        model = Turno
+        fields = '__all__'
+'''
+
+class DateRangeForm(forms.Form):
+    start_date = forms.DateField(widget=DateInput())
+    end_date = forms.DateField(widget=DateInput())
+    horaInicio = forms.TimeField()
+    horaFin = forms.TimeField()
+
+class CreacionTurnoNormalForm(forms.Form):
+    start_date = forms.DateField(widget=DateInput())
+    end_date = forms.DateField(widget=DateInput())
+    horaInicio = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time start ui-timepicker-input', 'value' : '8:00am'}))
+    horaFin = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time end ui-timepicker-input', 'value' : '8:15am'}))
+    '''class Meta:
+        model = Turno
+        fields = '__all__'
+        widgets = {
+            'estaActivo': forms.HiddenInput()
+            }'''
 
 class LoginForm(forms.Form):
     username = forms.CharField(label="usuario", max_length=64)

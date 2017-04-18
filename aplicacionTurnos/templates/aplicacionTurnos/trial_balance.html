@@ -1,0 +1,95 @@
+<html>
+<head>
+  <!-- datepicker jquery -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <!-- timepicker jquery -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css.map">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+
+  <!-- datepair.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepair.js/0.4.15/datepair.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepair.js/0.4.15/datepair.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepair.js/0.4.15/jquery.datepair.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepair.js/0.4.15/jquery.datepair.min.js"></script>
+
+  <script>
+  $(document).ready(function() {
+      $('.datepicker').datepicker();
+  });
+  </script>
+
+  <!-- basicExample jqurey.timepicker -->
+  <script>
+      $(function() {
+          $('#basicExample').timepicker();
+      });
+  </script>
+</head>
+
+<body>
+
+  <div>
+    <form action="" method="POST"> {% csrf_token %}
+    Start Date:{{ form.start_date }}&nbsp;&nbsp; End Date:{{ form.end_date }}<br/>
+    <input  type = "submit" name = "submit" value = "See Results">
+    </form>
+
+  </div>
+
+    <div class="demo">
+        <h2>Basic Example</h2>
+        <p><input id="basicExample" class="time ui-timepicker-input" autocomplete="off" value="12:00am" type="text"></p>
+    </div>
+
+    <article>
+            <div class="demo">
+                <h2>Datepair Plugin Example</h2>
+
+              <!--
+                La separacion entre los 2 campos de seleccion de hora esta definida por la direferencia entre sus values
+                Si por ejemplo el primero tiene por value 6:00am y el 6:15am siempre mantendran una diferencia de 15 minutos
+                Procurar que el value respete el minTime y el maxTime
+              -->
+                <p id="datepairExample">
+                    <input class="time start ui-timepicker-input" autocomplete="off" value="8:00am" type="text"> to
+                    <input class="time end ui-timepicker-input" autocomplete="off" value="8:15am" type="text">
+                </p>
+            </div>
+
+            <!--
+            showDuration: muestra el tiempo que hay entre la hora de inicio y la hora de fin al lado de cada opcion de la hora de fin
+            step: define de cuanto en cuanto tiempo debe crecer la hora del selector
+            minTIme: define la hora minima
+            maxTime: define la hora maxima
+            -->
+            <script>
+                $('#datepairExample .time').timepicker({
+                    'showDuration': true,
+                    'timeFormat': 'g:ia',
+                    'step' : 15,
+                    'minTime' : '8:00 am',
+                    'maxTime' : '18:00 pm',
+                    'disableTimeRanges' : [
+                      ['12:00 pm','15:00 pm'],
+                      ['09:00 am','09:31 am']
+                    ]
+                });
+
+
+                $('#datepairExample').datepair();
+            </script>
+
+        </article>
+
+
+<!-- <script type="text/javascript" src="datepair.js"></script>
+<script type="text/javascript" src="jquery.datepair.js"></script> -->
+
+</body>
+
+</html>

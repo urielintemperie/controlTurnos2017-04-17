@@ -194,9 +194,12 @@ def nuevoMedico(request):
             medico = form.save(commit=True)
             medico.estaActivo = True
             medico.save()
+            #form.estaActivo = True
+            #form.save(commit=True)
             return redirect('/nuevoMedico')
     else:
         form = medicoForm()
+    #return redirect('/')
     return render(request, 'aplicacionTurnos/nuevoMedico.html',{'form':form, 'medicos':medicos})
 
 @login_required
@@ -242,7 +245,9 @@ def nuevoTratamiento(request):
     if request.method == 'POST':
         form = tratamientoForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
+            tratamiento = form.save(commit=True)
+            tratamiento.estaActivo = True
+            tratamiento.save()
             return redirect('/nuevoTratamiento')
     else:
         form = tratamientoForm()
@@ -253,10 +258,8 @@ def editarTratamiento(request, pk):
     tratamiento = Tratamiento.objects.get(pk=pk)
     if request.method == 'POST':
         form = tratamientoForm(request.POST, instance = tratamiento)
-        if 'eliminar' in request.POST:
-            tratamiento.delete()
-            return redirect('/nuevoTratamiento')
-        elif form.is_valid():
+        if form.is_valid():
+            tratamiento.estaActivo = True
             form.save(commit=True)
             return redirect('/nuevoTratamiento')
     else:
@@ -588,3 +591,54 @@ def getSeconds(a):
     segundo = a.second
     time = hora + minuto + segundo
     return time
+
+def turnoNuevoMagia(request):
+    form = turnoNuevoMagiaForm()
+    return render(request, 'aplicacionTurnos/turnoNuevoMagia.html', {'form':form})
+
+def formCalendarioJQuery(request):
+    if request.method == "POST":
+            f = DateRangeForm(request.POST)
+            if f.is_valid():
+                c = f.save(commit = False)
+                c.end_date = timezone.now()
+                c.save()
+    else:
+        f = DateRangeForm()
+        '''f = DateRangeForm()
+        args = {}
+        args.update(csrf(request))
+        args['form'] = f'''
+
+
+    return render(request, 'aplicacionTurnos/trial_balance.html', {
+        'form': f
+    })
+
+'''
+def creacionTurnoNormal(request):
+    if request.method == "POST":
+            form = CreacionTurnoNormalForm(request.POST)
+            if form.is_valid():
+                turno = form.save(commit=True)
+                return redirect('aplicacionTurnos.views.home')
+    else:
+        form = CreacionTurnoNormalForm()
+    return render(request, 'aplicacionTurnos/creacionTurnoNormal.html', {'form': form})
+'''
+
+def creacionTurnoNormal(request):
+    if request.method == "POST":
+            #form = CreacionTurnoNormalForm(request.POST)
+            form = turnoNuevoMagiaForm(request.POST)
+            if form.is_valid():
+                turno = form.save(commit=True)
+                return redirect('aplicacionTurnos.views.home')
+                '''post = form.save(commit=False)
+                post.author = request.user
+                post.published_date = timezone.now()
+                post.save()
+                return redirect('post_detail', pk=post.pk)'''
+    else:
+        form = turnoNuevoMagiaForm()
+    return render(request, 'aplicacionTurnos/turnoNuevoMagia.html', {'form': form})

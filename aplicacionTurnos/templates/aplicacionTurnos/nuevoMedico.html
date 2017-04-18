@@ -21,7 +21,6 @@
               {% form_input form.correo %}
               {% form_input form.especialidad %}
               {% form_input form.horario %}
-              {% form_input form.estaActivo %}
               <div class="pull-right">
                 <input type="submit" class="btn btn-success" value="Guardar"/>
               </div>
@@ -49,7 +48,13 @@
           <td class="success">{{medico.dni}}</td>
           <td class="success">{{medico.telefono}}</td>
           <td class="success">{{medico.correo}}</td>
-          <td class="success">{{medico.especialidad}}</td>
+          <td class="success">
+          {% for especialidad in medico.especialidad.all %}
+            {{especialidad}}
+            <br>
+          {% endfor %}
+          </td>
+          <!--<td class="success">{{medico.espec.pk}}</td>-->
           <td class="success">
             {% for horario in medico.horario.all %}
             {{horario}}

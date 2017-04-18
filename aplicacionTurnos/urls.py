@@ -34,5 +34,8 @@ urlpatterns = [
     url(r'^busquedaObraSocial/$', views.busquedaObraSocial),
     url(r'^dobleForm/$', views.dobleForm),
     url(r'^dobleFormTurno/$', views.dobleFormTurno),
-    url(r'^docAndDay/$', views.docAndDay)
+    url(r'^docAndDay/$', views.docAndDay),
+    url(r'^turnoNuevoMagia/$', views.turnoNuevoMagia),
+    url(r'^formCalendarioJQuery/$', views.formCalendarioJQuery),
+    url(r'^creacionTurnoNormal/$', views.creacionTurnoNormal),
 ]

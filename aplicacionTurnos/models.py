@@ -47,6 +47,8 @@ class HorarioTrabajo(models.Model):
     dia = models.CharField(choices=opcionesDias,default=domingo, max_length = 9)
     horaInicio = models.TimeField()
     horaFin = models.TimeField()
+    estaActivo = models.BooleanField(default=True)
+
 
     def __str__(self):
         return str(self.dia)+' | '+str(self.horaInicio)+ ' | '+str(self.horaFin)
@@ -59,7 +61,7 @@ class Medico(models.Model):
     dni = models.IntegerField(blank=False)
     telefono = models.IntegerField(blank=True)
     correo = models.CharField(max_length=100,blank=True)
-    espec = models.ManyToManyField('Especialidad')
+    especialidad = models.ManyToManyField('Especialidad')
     horario = models.ManyToManyField('HorarioTrabajo')
     estaActivo = models.BooleanField(default=True)
     #duracionMinimaTurno
@@ -132,9 +134,7 @@ class Turno(models.Model):
     medico = models.ForeignKey('Medico')
     paciente = models.ForeignKey('Paciente')
     dia = models.DateField()
-
     horario = models.TimeField()
-
     especialidad = models.ForeignKey('Especialidad')
     tratamiento = models.ForeignKey('Tratamiento')
     estaActivo = models.BooleanField(default=True)
