@@ -59,15 +59,18 @@ class turnoForm(forms.ModelForm):
             }
 
 class turnoNuevoMagiaForm(forms.ModelForm):
-    horaInicio = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time start ui-timepicker-input', 'value' : '8:00am'}))
-    horaFin = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time end ui-timepicker-input', 'value' : '8:15am'}))
+    #horaInicio = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time start ui-timepicker-input', 'value' : '8:00am'}))
+    #horaFin = forms.TimeField(widget=forms.TextInput(attrs={'class' : 'time end ui-timepicker-input', 'value' : '8:15am'}))
     class Meta:
         model = Turno
         fields = '__all__'
         widgets = {
-            'estaActivo': forms.HiddenInput(),
+            #'estaActivo': forms.HiddenInput(),
+            #'dia' : forms.DateInput(attrs={'autocomplete' : 'off'}),
             'dia' : DateInput(),
-            'horarios': forms.HiddenInput()
+            'horaInicio': forms.TextInput(attrs={'class' : 'time start ui-timepicker-input', 'value' : '8:00am'}),
+            'horaFin' : forms.TextInput(attrs={'class' : 'time end ui-timepicker-input', 'value' : '8:15am'})
+            #'horarios': forms.HiddenInput(),
             }
     '''my_field = forms.DateField(widget = AdminDateWidget)
     days = forms.ChoiceField(choices=[(x, x) for x in range(1, 32)])'''
@@ -76,6 +79,14 @@ class turnoNuevoMagiaForm(forms.ModelForm):
         model = Turno
         fields = '__all__'
 '''
+    def clean(self):
+        medico = self.cleaned_data.get('medico')
+        dia = self.cleaned_data.get('dia')
+        horaInicio = self.cleaned_data.get('horaInicio')
+        horaFin = self.cleaned_data.get('horaFin')
+        if Turno.objects.filter(medico=medico,dia=dia,horaInicio=horaInicio,horaFin=horaFin).exists():
+            raise forms.ValidationError("Turno ya tomado")
+
 
 class DateRangeForm(forms.Form):
     start_date = forms.DateField(widget=DateInput())

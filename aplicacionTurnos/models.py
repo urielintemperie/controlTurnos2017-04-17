@@ -134,10 +134,12 @@ class Turno(models.Model):
     medico = models.ForeignKey('Medico')
     paciente = models.ForeignKey('Paciente')
     dia = models.DateField()
-    horario = models.TimeField()
+    #horario = models.TimeField()
+    horaInicio = models.TimeField(blank=False, null=False)
+    horaFin = models.TimeField(blank=False, null=False)
     especialidad = models.ForeignKey('Especialidad')
     tratamiento = models.ForeignKey('Tratamiento')
     estaActivo = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.pk) + ' | ' + str(self.estado)+' | '+str(self.horario)+' | '+str(self.medico)+' | '+str(self.paciente)+' | '+str(self.tratamiento)
+        return str(self.pk) + ' | ' + str(self.estado)+' | '+str(self.horaInicio)+'-'+str(self.horaFin)+' | '+str(self.medico)+' | '+str(self.paciente)+' | '+str(self.tratamiento)

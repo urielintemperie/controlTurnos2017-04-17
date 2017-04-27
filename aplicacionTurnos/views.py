@@ -593,8 +593,28 @@ def getSeconds(a):
     return time
 
 def turnoNuevoMagia(request):
-    form = turnoNuevoMagiaForm()
-    return render(request, 'aplicacionTurnos/turnoNuevoMagia.html', {'form':form})
+    horasTomadas = []
+    turnosCreados = Turno.objects.filter(dia="2017-04-24") #.values_list('horaInicio','horaFin')
+    #(datetime.datetime.combine(datetime.date(1,1,1),t)+datetime.timedelta(seconds=60)).time()
+    for turno in turnosCreados:
+        #horaInicioFin = (str(turno.horaInicio),str(turno.horaFin+datetime.timedelta(seconds=60)))
+        horaInicioFin = (str(turno.horaInicio),str((datetime.datetime.combine(datetime.date(1,1,1),turno.horaFin)+datetime.timedelta(seconds=60)).time()))
+        horasTomadas.append(horaInicioFin)
+
+    print (horasTomadas)
+    if request.method == "POST":
+        form = turnoNuevoMagiaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('http://localhost:8000/admin/aplicacionTurnos/turno/')
+        else:
+            print ("formulario errores:")
+            print (form.errors)
+            print ("formulario bien")
+            print (form.non_field_errors)
+    else:
+        form = turnoNuevoMagiaForm()
+    return render(request, 'aplicacionTurnos/turnoNuevoMagia.html', {'form':form,'horasTomadas':horasTomadas})
 
 def formCalendarioJQuery(request):
     if request.method == "POST":
